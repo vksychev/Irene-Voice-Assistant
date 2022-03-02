@@ -8,3 +8,5 @@
 /temp/
 /plugins/plugin_tts_silero.py
 *.pyc
+pyrightconfig.json
+/model
