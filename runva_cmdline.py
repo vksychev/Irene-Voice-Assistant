@@ -12,13 +12,13 @@ if __name__ == "__main__":
 
     # почему бы сразу не отладить какую-то команду?
     time.sleep(0.5)
-    cmd_core.execute_next("погода",None)
+    cmd_core.execute_next("погода", None)
 
-    exit(0) # если нужно - закомментируйте и можно будет работать с командной строкой
+    exit(0)  # если нужно - закомментируйте и можно будет работать с командной строкой
 
     while True:
         cmd = input("> ")
         if cmd == "exit":
             break
 
-        cmd_core.execute_next(cmd,None)
+        cmd_core.execute_next(cmd, None)
