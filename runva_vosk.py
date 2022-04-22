@@ -95,8 +95,9 @@ if __name__ == "__main__":
                             print("Input: ", voice_input_str)
                         try:
                             voice_input = voice_input_str.split(" ")
-                            for ind in range(len(voice_input)):
+                            for ind in range(len(voice_input) - 1):
                                 callname = voice_input[ind]
+                                second = voice_input[ind + 1]
                                 if callname in core.voiceAssNames:  # найдено имя ассистента
                                     if core.logPolicy == "cmd":
                                         print("Input (cmd): ", voice_input_str)
@@ -104,6 +105,15 @@ if __name__ == "__main__":
                                     mic_blocked = True
                                     command_options = " ".join(
                                         [str(input_part) for input_part in voice_input[(ind + 1):len(voice_input)]])
+                                    core.execute_next(command_options, None)
+                                    break
+                                elif f"{callname} {second}" in core.voiceAssNames:  # найдено имя ассистента
+                                    if core.logPolicy == "cmd":
+                                        print("Input (cmd): ", voice_input_str)
+
+                                    mic_blocked = True
+                                    command_options = " ".join(
+                                        [str(input_part) for input_part in voice_input[(ind + 2):len(voice_input)]])
                                     core.execute_next(command_options, None)
                                     break
                         except Exception as err:

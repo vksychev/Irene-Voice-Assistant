@@ -9,4 +9,6 @@
 /plugins_inactive/plugin_tts_silero.py
 *.pyc
 pyrightconfig.json
-/model
+/resources/model
+/resources/
+/model/
