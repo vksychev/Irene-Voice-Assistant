@@ -10,7 +10,7 @@ def start(core: VACore):
         "require_online": False,  # требует ли онлайн?
 
         "commands": {  # набор скиллов. Фразы скилла разделены | . Если найдены - вызывается функция
-            "чай": play_greetings,
+            "чай": turn_on_kettle,
         },
 
     }
@@ -24,7 +24,7 @@ SETTINGS = {
 }
 
 
-def play_greetings(core: VACore, phrase: str):
+def turn_on_kettle(core: VACore, phrase: str):
     hook = HomeAssistantHook()
     hook.kettle_turn_on(
         service=SETTINGS["service"],

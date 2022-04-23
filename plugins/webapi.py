@@ -2,15 +2,15 @@
 # author: Vladislav Janvarev
 
 
-
 import os
 
 from vacore import VACore
 
-modname = os.path.basename(__file__)[:-3] # calculating modname
+modname = os.path.basename(__file__)[:-3]  # calculating modname
+
 
 # функция на старте
-def start(core:VACore):
+def start(core: VACore):
     manifest = {
         "name": "Webapi options",
         "version": "1.0",
@@ -25,6 +25,6 @@ def start(core:VACore):
     }
     return manifest
 
-def start_with_options(core:VACore, manifest:dict):
-    pass
 
+def start_with_options(core: VACore, manifest: dict):
+    pass
