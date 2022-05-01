@@ -28,13 +28,14 @@ class HomeAssistantHook:
         data = {
             "entity_id": f"{service}.{name}"
         }
-        self._send_request(service, method, data)
+        return self._send_request(service, method, data)
 
     def _send_request(self, service: str, method: str, data: dict):
         url = f"http://{self._host}:{self._port}/api/services/{service}/{method}"
         headers = self.make_headers()
         response = post(url, headers=headers, json=data)
         print(response)
+        return response.status_code
 
     def make_headers(self):
         auth = f"Bearer {self._token}"

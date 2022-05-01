@@ -26,8 +26,13 @@ SETTINGS = {
 
 def turn_on_kettle(core: VACore, phrase: str):
     hook = HomeAssistantHook()
-    hook.kettle_turn_on(
+    code = hook.kettle_turn_on(
         service=SETTINGS["service"],
         method=SETTINGS["method"],
         name=SETTINGS["entity"]
     )
+    if code != 200:
+        core.play_voice_assistant_speech("Какая-то ошибка")
+    else:
+        core.play_voice_assistant_speech("Ооо чайку. Ща поставлю")
+
