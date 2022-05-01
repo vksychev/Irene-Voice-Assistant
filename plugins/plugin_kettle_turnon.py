@@ -1,10 +1,18 @@
 # функция на старте
+from utils.functions import choose_by_rarity
 from utils.home_assistant_hook import HomeAssistantHook
 from vacore import VACore
 
-ANSWERS = {
-    "common": [],
+ANSWERS_ERROR = {
+    "common": ["Какая-то ошибка"],
     "uncommon": [],
+    "rare": [],
+    "mythic": [],
+    "legendary": []
+}
+ANSWERS = {
+    "common": ["Будет сделано", "Опять работать"],
+    "uncommon": ["Оооо, ща ебану"],
     "rare": [],
     "mythic": [],
     "legendary": []
@@ -39,7 +47,11 @@ def turn_on_kettle(core: VACore, phrase: str):
         method=SETTINGS["method"],
         name=SETTINGS["entity"]
     )
+    process_code(code, core)
+
+
+def process_code(code, core):
     if code != 200:
-        core.play_voice_assistant_speech("Какая-то ошибка")
+        core.play_voice_assistant_speech(choose_by_rarity(ANSWERS_ERROR))
     else:
-        core.play_voice_assistant_speech("Ооо чайку. Ща поставлю")
+        core.play_voice_assistant_speech(choose_by_rarity(ANSWERS))
