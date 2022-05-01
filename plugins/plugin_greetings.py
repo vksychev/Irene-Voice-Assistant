@@ -2,7 +2,17 @@
 # author: Vladislav Janvarev (inspired by EnjiRouz)
 
 import random
+
+from utils.functions import choose_by_rarity
 from vacore import VACore
+
+ANSWERS = {
+    "common": ["Рада тебя видеть!"],
+    "uncommon": ["Иди нахуй"],
+    "rare": [],
+    "mythic": [],
+    "legendary": []
+}
 
 
 # функция на старте
@@ -23,8 +33,5 @@ def play_greetings(core: VACore, phrase: str):  # в phrase находится �
     # если юзер сказал больше
     # в этом плагине не используется
     # Проигрывание случайной приветственной речи
-    greetings = [
-        "Иди нахуй",
-        "Рада тебя видеть!",
-    ]
-    core.play_voice_assistant_speech(greetings[random.randint(0, len(greetings) - 1)])
+    answer = choose_by_rarity(ANSWERS)
+    core.play_voice_assistant_speech(answer)

@@ -2,6 +2,14 @@
 from utils.home_assistant_hook import HomeAssistantHook
 from vacore import VACore
 
+ANSWERS = {
+    "common": [],
+    "uncommon": [],
+    "rare": [],
+    "mythic": [],
+    "legendary": []
+}
+
 
 def start(core: VACore):
     manifest = {  # возвращаем настройки плагина - словарь
@@ -35,4 +43,3 @@ def turn_on_kettle(core: VACore, phrase: str):
         core.play_voice_assistant_speech("Какая-то ошибка")
     else:
         core.play_voice_assistant_speech("Ооо чайку. Ща поставлю")
-
