@@ -69,7 +69,7 @@ if __name__ == "__main__":
                 print("Input: ", voice_input_str)
 
             try:
-                voice_input = voice_input_str.split(" ")
+                voice_input = "" if voice_input_str is None else voice_input_str.split(" ")
                 # callname = voice_input[0]
                 for ind in range(len(voice_input)):
                     callname = voice_input[ind]
