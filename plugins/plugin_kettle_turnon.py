@@ -34,20 +34,17 @@ def start(core: VACore):
 
 
 SETTINGS = {
-    "service": "water_heater",
-    "method": "turn_on",
-    "entity": "skykettle"
+    "service": "water_heater.turn_on",
+    "entity": "water_heater.skykettle"
 }
 
 
 def turn_on_kettle(core: VACore, phrase: str):
     hook = HomeAssistantHook()
-    code = hook.kettle_turn_on(
+    hook.trigger_service(
         service=SETTINGS["service"],
-        method=SETTINGS["method"],
-        name=SETTINGS["entity"]
+        entity=SETTINGS["entity"]
     )
-    process_code(code, core)
 
 
 def process_code(code, core):
