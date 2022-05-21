@@ -41,10 +41,11 @@ SETTINGS = {
 
 def turn_on_kettle(core: VACore, phrase: str):
     hook = HomeAssistantHook()
-    hook.trigger_service(
+    code = hook.trigger_service(
         service=SETTINGS["service"],
         entity=SETTINGS["entity"]
     )
+    process_code(code, core)
 
 
 def process_code(code, core):
