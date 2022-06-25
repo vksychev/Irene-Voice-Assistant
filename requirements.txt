@@ -6,3 +6,5 @@ sounddevice
 soundfile
 pyautogui
 requests
+speechrecognition
+pyaudio

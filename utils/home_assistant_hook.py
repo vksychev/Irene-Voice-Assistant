@@ -28,7 +28,7 @@ class HomeAssistantHook:
             data = data_extra
         else:
             data = {
-                "entity_id": f"{entity}"
+                "entity_id": entity
             }
         return self._send_request(service, data)
 
