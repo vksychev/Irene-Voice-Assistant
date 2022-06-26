@@ -27,8 +27,13 @@ def start(core: VACore):
 
         "commands": {  # набор скиллов. Фразы скилла разделены | . Если найдены - вызывается функция
             "выключи": {
-                "свет": turn_off_light
+                "свет | свет везде": turn_off_light
             },
+            "включи": {
+                "свет": {
+                    "на кухне": turn_on_light
+                }
+            }
         },
 
     }
@@ -39,6 +44,19 @@ def turn_off_light(core: VACore, phrase: str):
     settings = {
         "service": "light.turn_off",
         "entity": "light.all"
+    }
+    hook = HomeAssistantHook()
+    code = hook.trigger_service(
+        service=settings["service"],
+        entity=settings["entity"]
+    )
+    process_code(code, core)
+
+
+def turn_on_light(core: VACore, phrase: str):
+    settings = {
+        "service": "light.turn_off",
+        "entity": "light.kitchen"
     }
     hook = HomeAssistantHook()
     code = hook.trigger_service(
