@@ -19,7 +19,8 @@ ANSWERS = {
 }
 
 ROOMS = {
-    "light.kitchen": ["кухня", "кухне", "кухню", "жральне"]
+    "light.kitchen": ["кухня", "кухне", "кухню", "жральне"],
+    "light.bedroom": ["спальня", "спальне"]
 }
 
 
@@ -31,7 +32,8 @@ def start(core: VACore):
 
         "commands": {  # набор скиллов. Фразы скилла разделены | . Если найдены - вызывается функция
             "выключи": {
-                "свет": turn_off_light
+                "свет": turn_off_light,
+                "свет везде | весь свет": turn_off_all
             },
             "включи": {
                 "свет": turn_on_light
@@ -44,10 +46,14 @@ def start(core: VACore):
 
 def turn_off_light(core: VACore, phrase: str):
     collector = {}
-    for room in ROOMS:
-        for synonym in ROOMS[room]:
-            if phrase.find(synonym) > -1:
-                collector[synonym] = turn_off(room)
+    if phrase == "":
+        room = "light.all"
+        collector[room] = turn_off(room)
+    else:
+        for room in ROOMS:
+            for synonym in ROOMS[room]:
+                if phrase.find(synonym) > -1:
+                    collector[synonym] = turn_off(room)
     codes = collector.values()
     result = 200
     for code in codes:
@@ -68,6 +74,10 @@ def turn_on_light(core: VACore, phrase: str):
         if code >= 300:
             result = code
     process_code(result, core)
+
+
+def turn_off_all():
+    return run_service("light.turn_on", "light.all")
 
 
 def turn_on(room):
