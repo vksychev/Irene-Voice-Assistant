@@ -63,9 +63,9 @@ def turn_on_light(core: VACore, phrase: str):
             if phrase.find(synonym) > -1:
                 collector[synonym] = turn_on(room)
     codes = collector.values()
-    result = '200'
+    result = 200
     for code in codes:
-        if code >= '300':
+        if code >= 300:
             result = code
     process_code(result, core)
 
