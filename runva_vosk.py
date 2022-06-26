@@ -75,42 +75,44 @@ if __name__ == "__main__":
         else:
             dump_fn = None
 
-        print('#' * 80)
-        print('Press Ctrl+C to stop the recording')
-        print('#' * 80)
+        with sd.RawInputStream(samplerate=args.samplerate, blocksize=8000, device=args.device, dtype='int16',
+                               channels=1, callback=callback):
+            print('#' * 80)
+            print('Press Ctrl+C to stop the recording')
+            print('#' * 80)
 
-        rec = vosk.KaldiRecognizer(model, args.samplerate)
-        core = VACore()
-        core.init_with_plugins()
-        while True:
-            data = q.get()
-            if rec.AcceptWaveform(data):
-                recognized_data = rec.Result()
-                recognized_data = json.loads(recognized_data)
-                voice_input_str = recognized_data["text"]
-                if voice_input_str != "":
-                    if core.logPolicy == "all":
-                        print("Input: ", voice_input_str)
-                    try:
-                        voice_input = voice_input_str.split(" ")
-                        for ind in range(len(voice_input)):
-                            callname = voice_input[ind]
-                            if callname in core.voiceAssNames:  # найдено имя ассистента
-                                if core.logPolicy == "cmd":
-                                    print("Input (cmd): ", voice_input_str)
+            rec = vosk.KaldiRecognizer(model, args.samplerate)
+            core = VACore()
+            core.init_with_plugins()
+            while True:
+                data = q.get()
+                if rec.AcceptWaveform(data):
+                    recognized_data = rec.Result()
+                    recognized_data = json.loads(recognized_data)
+                    voice_input_str = recognized_data["text"]
+                    if voice_input_str != "":
+                        if core.logPolicy == "all":
+                            print("Input: ", voice_input_str)
+                        try:
+                            voice_input = voice_input_str.split(" ")
+                            for ind in range(len(voice_input)):
+                                callname = voice_input[ind]
+                                if callname in core.voiceAssNames:  # найдено имя ассистента
+                                    if core.logPolicy == "cmd":
+                                        print("Input (cmd): ", voice_input_str)
 
-                                mic_blocked = True
-                                command_options = " ".join(
-                                    [str(input_part) for input_part in voice_input[(ind + 1):len(voice_input)]])
-                                core.execute_next(command_options, None)
-                                break
-                    except Exception as err:
-                        print(traceback.format_exc())
+                                    mic_blocked = True
+                                    command_options = " ".join(
+                                        [str(input_part) for input_part in voice_input[(ind + 1):len(voice_input)]])
+                                    core.execute_next(command_options, None)
+                                    break
+                        except Exception as err:
+                            print(traceback.format_exc())
 
-                    mic_blocked = False
-            core._update_timers()
-            if dump_fn is not None:
-                dump_fn.write(data)
+                        mic_blocked = False
+                core._update_timers()
+                if dump_fn is not None:
+                    dump_fn.write(data)
     except KeyboardInterrupt:
         print('Done')
         parser.exit(0)
