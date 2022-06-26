@@ -1,6 +1,6 @@
 # функция на старте
 from utils.functions import choose_by_rarity
-from utils.home_assistant_hook import HomeAssistantHook
+from utils.home_assistant_hook import HomeAssistantHook, run_service
 from vacore import VACore
 
 ANSWERS_ERROR = {
@@ -18,6 +18,10 @@ ANSWERS = {
     "legendary": []
 }
 
+ROOMS = {
+    "kitchen": ["кухня", "кухне", "кухню", "жральне"]
+}
+
 
 def start(core: VACore):
     manifest = {  # возвращаем настройки плагина - словарь
@@ -27,12 +31,10 @@ def start(core: VACore):
 
         "commands": {  # набор скиллов. Фразы скилла разделены | . Если найдены - вызывается функция
             "выключи": {
-                "свет | свет везде": turn_off_light
+                "свет": turn_off_light
             },
             "включи": {
-                "свет": {
-                    "на кухне": turn_on_light
-                }
+                "свет": turn_on_light
             }
         },
 
@@ -41,29 +43,39 @@ def start(core: VACore):
 
 
 def turn_off_light(core: VACore, phrase: str):
-    settings = {
-        "service": "light.turn_off",
-        "entity": "light.all"
-    }
-    hook = HomeAssistantHook()
-    code = hook.trigger_service(
-        service=settings["service"],
-        entity=settings["entity"]
-    )
-    process_code(code, core)
+    collector = {}
+    for room in ROOMS:
+        for synonym in ROOMS[room]:
+            if phrase.find(synonym) > -1:
+                collector[synonym] = turn_off(room)
+    codes = collector.values()
+    result = '200'
+    for code in codes:
+        if code >= '300':
+            result = code
+    process_code(result, core)
 
 
 def turn_on_light(core: VACore, phrase: str):
-    settings = {
-        "service": "light.turn_off",
-        "entity": "light.kitchen"
-    }
-    hook = HomeAssistantHook()
-    code = hook.trigger_service(
-        service=settings["service"],
-        entity=settings["entity"]
-    )
-    process_code(code, core)
+    collector = {}
+    for room in ROOMS:
+        for synonym in ROOMS[room]:
+            if phrase.find(synonym) > -1:
+                collector[synonym] = turn_on(room)
+    codes = collector.values()
+    result = '200'
+    for code in codes:
+        if code >= '300':
+            result = code
+    process_code(result, core)
+
+
+def turn_on(room):
+    return run_service("light.turn_on", room)
+
+
+def turn_off(room):
+    return run_service("light.turn_on", room)
 
 
 def process_code(code, core):

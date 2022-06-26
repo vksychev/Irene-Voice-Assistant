@@ -48,6 +48,18 @@ class HomeAssistantHook:
         }
 
 
+def run_service(service, entity):
+    settings = {
+        "service": service,
+        "entity": entity
+    }
+    hass_hook = HomeAssistantHook()
+    return hass_hook.trigger_service(
+        service=settings["service"],
+        entity=settings["entity"]
+    )
+
+
 if __name__ == '__main__':
     SETTINGS = {
         "service": "water_heater.turn_on",
