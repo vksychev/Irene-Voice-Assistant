@@ -85,14 +85,12 @@ if __name__ == "__main__":
             core = VACore()
             core.init_with_plugins()
             while True:
-                print("тут1")
+                #в этом месте происходит затуп
                 data = q.get()
-                print("тут2")
                 if rec.AcceptWaveform(data):
                     recognized_data = rec.Result()
                     recognized_data = json.loads(recognized_data)
                     voice_input_str = recognized_data["text"]
-                    print("тут3")
                     if voice_input_str != "":
                         if core.logPolicy == "all":
                             print("Input: ", voice_input_str)
@@ -110,7 +108,6 @@ if __name__ == "__main__":
                                     break
                         except Exception as err:
                             print(traceback.format_exc())
-
                         mic_blocked = False
                 core._update_timers()
                 if dump_fn is not None:
